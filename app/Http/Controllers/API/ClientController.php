@@ -1,10 +1,11 @@
 <?php
-
 namespace App\Http\Controllers\API;
-
+use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Client;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\TestMail;
 class ClientController extends Controller
 {
    /**
@@ -28,9 +29,65 @@ class ClientController extends Controller
      */
     public function store(Request $request)
     {
-        
-         Client::create($request->all());
-        return response()->json('success');
+        //validation rules
+        $rules = [ 
+        'first_name' => 'required|string',
+        'last_name' => 'required|string',
+        'email' => 'required|email|unique:clients',
+        'primary_counsel' => 'required|string',
+        'case_details' => 'required|string',
+        'dob' => 'required|date',
+        'profile_image' => 'image'
+        ];
+
+        $response = array('message' => '', 'success'=>false);
+
+$validator = Validator::make($request->all(), $rules);
+    if ($validator->fails()) {
+        //return error messages
+        $response['message'] = $validator->messages();
+    }else{
+//process the request
+
+//if the client uploaded a profile image then process it
+   if($request->hasFile('profile_image')){
+            //get filename with extension
+            $filenameWithExt = $request->file('profile_image')->getClientOriginalName();
+            //get just filename
+            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+            $filename =  preg_replace('/[^a-zA-Z]+/', '', $filename);
+            //get just ext
+            $extension = $request->file('profile_image')->getClientOriginalExtension();
+            //filename to store
+            $filenameToStore = $filename.'_'.time().'.'.$extension;
+            //upload image
+            $path = $request->file('profile_image')->storeAs('public/profile_images',$filenameToStore);
+        }else{
+            $filenameToStore = '';
+        }
+//create a new client
+    $client = new Client;
+    $client ->first_name = $request->first_name;
+    $client ->last_name = $request->last_name;
+    $client ->email = $request->email;
+    $client ->primary_counsel = $request->primary_counsel;
+    $client ->case_details = $request->case_details;
+    $client ->dob = $request->dob;
+    $client ->profile_image = $filenameToStore;
+    $client->save();
+       $response['success']  = true;
+
+//send welcome mail
+  $details = [
+        'title' => 'Welcome to Law Firm X',
+        'body' => 'Thanks for joining us.'
+    ];
+   
+Mail::to($client->email)->send(new TestMail($details));
+   
+    //dd("Email is Sent.");
+}
+return $response;
     }
 
     /**
@@ -50,7 +107,7 @@ class ClientController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function find($search)
+    public function search($search)
     {
     // Search the clients table by client last name
     $clients = Client::query()

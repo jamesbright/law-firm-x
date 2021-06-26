@@ -16,5 +16,5 @@ use App\Http\Controllers\API\ClientController;
 
     Route::get('/', [ClientController::class, 'index']);
     Route::post('add', [ClientController::class, 'store']);
-    Route::get('find/{lastName}', [ClientController::class, 'find']);
+    Route::get('find/{lastName}', [ClientController::class, 'search']);
     Route::get('get/{id}', [ClientController::class, 'show']);
