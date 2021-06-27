@@ -59,7 +59,7 @@ $validator = Validator::make($request->all(), $rules);
             //get just ext
             $extension = $request->file('profile_image')->getClientOriginalExtension();
             //filename to store
-            $filenameToStore = $filename.'_'.time().'.'.$extension;
+            $filenameToStore ='../storage/profile_images/'. $filename.'_'.time().'.'.$extension;
             //upload image
             $path = $request->file('profile_image')->storeAs('public/profile_images',$filenameToStore);
         }else{

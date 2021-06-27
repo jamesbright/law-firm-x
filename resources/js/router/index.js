@@ -1,51 +1,30 @@
-import { createWebHistory, createRouter } from "vue-router";
+import {createWebHistory, createRouter} from "vue-router";
 
 
-import Books from '../components/Clients';
-import AddBook from '../components/AddClient';
-import EditBook from '../components/ClientProfile';
+import Clients from '../components/Clients';
+import AddClient from '../components/AddClient';
+import Dashboard from '../components/Dashboard';
 
 export const routes = [
     {
-        name: 'home',
+        name: 'clients',
         path: '/',
-        component: Home
+        component: Clients
     },
-    {
-        name: 'about',
-        path: '/about',
-        component: About
-    },
-    {
-        name: 'register',
-        path: '/register',
-        component: Register
-    },
-    {
-        name: 'login',
-        path: '/login',
-        component: Login
-    },
+  
     {
         name: 'dashboard',
-        path: '/dashboard',
-        component: Dashboard
+        path: '/clients/dashboard/:id',
+        component: Dashboard,
+        props:true
     },
+  
     {
-        name: 'books',
-        path: '/books',
-        component: Books
+        name: 'addclient',
+        path: '/clients/add',
+        component: AddClient
     },
-    {
-        name: 'addbook',
-        path: '/books/add',
-        component: AddBook
-    },
-    {
-        name: 'editbook',
-        path: '/books/edit/:id',
-        component: EditBook
-    },
+  
 ];
 
 const router = createRouter({

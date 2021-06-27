@@ -1,20 +1,17 @@
 <template>
-    <div class="container">
-        <div class="text-center" style="margin: 20px 0px 20px 0px;">
-            <a href="https://shouts.dev/" target="_blank"><img src="https://i.imgur.com/Nt3kJXa.png"></a><br>
-            <span class="text-secondary">Laravel SPA with Vue 3, Auth (Sanctum), CURD Example</span>
-        </div>
-
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <div class="collapse navbar-collapse">
-                <!-- for logged-in user-->
+    <div class="rounded-xl shadow-md border-2 border-fuchsia-600 p-10 bg-gradient-to-r from-green-700 to-blue-800 ">
+     <div class="border-2 ring-2 hover:border-gray-500 bg-white rounded-xl shadow-md  py-8 px-8">
+     <h4 class="text-center mb-8"> LAW FIRM X</h4>
+                <!-- 
                 <div class="navbar-nav">
-                    <router-link to="/" class="nav-item nav-link">Clients</router-link>
-                    <router-link to="/add" class="nav-item nav-link">Add Client</router-link>
-            </div>
-        </nav>
-        <br/>
+                    <router-link to="/" class="nav-item nav-link">FirmX</router-link>
+                    <router-link to="/clients/add" class="nav-item nav-link">New client</router-link>
+                </div>
+            -->
+       
+      
         <router-view/>
+        </div>
     </div>
 </template>
 
@@ -23,14 +20,13 @@ export default {
     name: "App",
     data() {
         return {
-          
         }
     },
     created() {
-      
+        
     },
     methods: {
-    
+        
     },
 }
 </script>
