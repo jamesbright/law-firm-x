@@ -58,7 +58,7 @@ import SideBar from "./SideBar";
 
 export default {
   name: "Dashboard",
-  props: ["id"],
+  props: ["id"],// client id passed via router
   components: {
     SideBar,
   },
@@ -67,15 +67,8 @@ export default {
       client: [],
     };
   },
-  mounted() {
-    this.$axios
-      .get(`http://localhost:8000/api/clients/get/${this.id}`)
-      .then((response) => {
-        this.client = response.data;
-      })
-      .catch(function (error) {
-        console.error(error);
-      });
+  created() {
+  this.getClient();
   },
   methods: { 
          capitalize(value) {
@@ -84,9 +77,9 @@ export default {
     return value.charAt(0).toUpperCase() + value.slice(1)
   },
     formatDate(value) {
-      if (value) {
+      if (!value) return ''
         return moment(String(value)).format("MM-DD-YYYY");
-      }
+      
     },
       getImage(image){
     if(image)
@@ -95,7 +88,19 @@ export default {
       return "../../storage/profile_images/blank_pic.png";
 
     },
+    getClient(){
+      //get a single client with the client id
+  this.$axios
+      .get(`/api/clients/get/${this.id}`)
+      .then((response) => {
+                this.client = response.data;
+      })
+      .catch(function (error) {
+        console.error(error);
+      });
+    },
     goBack(){
+      //go back to previous route
         this.$router.go(-1);
     }
   },

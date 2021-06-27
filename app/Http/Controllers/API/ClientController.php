@@ -88,8 +88,7 @@ $validator = Validator::make($request->all(), $rules);
     ];
    
 Mail::to($client->email)->send(new TestMail($details));
-   
-    //dd("Email is Sent.");
+
 }
 return $response;
     }

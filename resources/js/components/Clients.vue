@@ -3,9 +3,12 @@
  
     <SideBar />
     <div>
+
+
       <section
         class="py-8 px-8 mb-2 max-w-sm mx-auto space-y-2 sm:py-4 sm:flex sm:items-center sm:space-y-0 sm:space-x-6"
       >
+   
         <header class="flex items-center justify-between">
           <router-link to="/clients/add">
             <button
@@ -49,7 +52,22 @@
           />
         </form>
       </section>
+    
       <h4 class="text-center mb-4">All Clients</h4>
+      <!--start skeleton-->
+             <div v-show="loading" class="border border-blue-300 shadow rounded-md p-4 max-w-sm w-full mx-auto">
+  <div class="animate-pulse flex space-x-4">
+    <div class="rounded-full bg-blue-400 h-12 w-12"></div>
+    <div class="flex-1 space-y-4 py-1">
+      <div class="h-4 bg-blue-400 rounded w-3/4"></div>
+      <div class="space-y-2">
+        <div class="h-4 bg-blue-400 rounded"></div>
+        <div class="h-4 bg-blue-400 rounded w-5/6"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- end skeleton-->
       <div
         v-if="clients"
         v-for="(client, index) in clients"
@@ -97,7 +115,8 @@ export default {
   data() {
     return {
       clients: [],
-      keyword:"",
+      keyword:null,
+      loading:true
     };
   },
   created() {
@@ -123,9 +142,10 @@ export default {
     search(){
       if (this.keyword){
       this.$axios
-      .get(`http://localhost:8000/api/clients/search/${this.keyword}`)
+      .get(`/api/clients/search/${this.keyword}`)
       .then((response) => {
         this.clients = response.data;
+        this.loading = false;
       })
       .catch(function (error) {
         console.error(error);
@@ -136,9 +156,11 @@ export default {
     },
     getClients(){
 this.$axios
-      .get("http://localhost:8000/api/clients")
+      .get("/api/clients")
       .then((response) => {
         this.clients = response.data;
+        this.loading = false;
+
       })
       .catch(function (error) {
         console.error(error);

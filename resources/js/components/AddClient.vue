@@ -79,6 +79,7 @@
                 {{ btnText }}
               </button>
             </div>
+            <div class="text-red-500">{{ error }}</div>
           </form>
         </div>
       </div>
@@ -97,11 +98,14 @@ export default {
     return {
       client: {},
       btnText: "Add Client",
+      error:null,
     };
   },
   methods: {
     addClient() {
-      this.btnText = "Processing..";
+      // clear previous errors if any
+      this.error = null;
+      //create a form data and append all fields
       let formData = new FormData();
       formData.append("first_name", this.client.first_name);
       formData.append("last_name", this.client.last_name);
@@ -109,9 +113,12 @@ export default {
       formData.append("primary_counsel", this.client.primary_counsel);
       formData.append("case_details", this.client.case_details);
       formData.append("dob", this.client.dob);
+        //add the profile photo  to formdata if available
       if (this.client.profile_image)
         formData.append("profile_image", this.client.profile_image);
-      this.btnText = "Sending..";
+
+      this.btnText = "Processing..";
+      //make a post request tp server 
       this.$axios
         .post("http://localhost:8000/api/clients/add", formData, {
           headers: {
@@ -119,6 +126,13 @@ export default {
           },
         })
         .then((response) => {
+          //if an error occured ,indicate it and terminate execution
+          if(response.data.success == false){
+          this.error = response.data.message;
+          this.btnText = "Add Client";
+          return;
+          }
+          //success 
           this.btnText = "Done";
           this.$router.push({ name: "clients" });
         })
@@ -130,6 +144,7 @@ export default {
       this.client.profile_image = this.$refs.file.files[0];
     },
     goBack() {
+      //go back to previous route
       this.$router.go(-1);
     },
   },

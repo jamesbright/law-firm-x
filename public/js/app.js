@@ -16318,28 +16318,41 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       client: {},
-      btnText: "Add Client"
+      btnText: "Add Client",
+      error: null
     };
   },
   methods: {
     addClient: function addClient() {
       var _this = this;
 
-      this.btnText = "Processing..";
+      // clear previous errors if any
+      this.error = null; //create a form data and append all fields
+
       var formData = new FormData();
       formData.append("first_name", this.client.first_name);
       formData.append("last_name", this.client.last_name);
       formData.append("email", this.client.email);
       formData.append("primary_counsel", this.client.primary_counsel);
       formData.append("case_details", this.client.case_details);
-      formData.append("dob", this.client.dob);
+      formData.append("dob", this.client.dob); //add the profile photo  to formdata if available
+
       if (this.client.profile_image) formData.append("profile_image", this.client.profile_image);
-      this.btnText = "Sending..";
+      this.btnText = "Processing.."; //make a post request tp server 
+
       this.$axios.post("http://localhost:8000/api/clients/add", formData, {
         headers: {
           "Content-Type": "multipart/form-data"
         }
       }).then(function (response) {
+        //if an error occured ,indicate it and terminate execution
+        if (response.data.success == false) {
+          _this.error = response.data.message;
+          _this.btnText = "Add Client";
+          return;
+        } //success 
+
+
         _this.btnText = "Done";
 
         _this.$router.push({
@@ -16353,6 +16366,7 @@ __webpack_require__.r(__webpack_exports__);
       this.client.profile_image = this.$refs.file.files[0];
     },
     goBack: function goBack() {
+      //go back to previous route
       this.$router.go(-1);
     }
   }
@@ -16384,7 +16398,8 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       clients: [],
-      keyword: ""
+      keyword: null,
+      loading: true
     };
   },
   created: function created() {
@@ -16407,8 +16422,9 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       if (this.keyword) {
-        this.$axios.get("http://localhost:8000/api/clients/search/".concat(this.keyword)).then(function (response) {
+        this.$axios.get("/api/clients/search/".concat(this.keyword)).then(function (response) {
           _this.clients = response.data;
+          _this.loading = false;
         })["catch"](function (error) {
           console.error(error);
         });
@@ -16419,8 +16435,9 @@ __webpack_require__.r(__webpack_exports__);
     getClients: function getClients() {
       var _this2 = this;
 
-      this.$axios.get("http://localhost:8000/api/clients").then(function (response) {
+      this.$axios.get("/api/clients").then(function (response) {
         _this2.clients = response.data;
+        _this2.loading = false;
       })["catch"](function (error) {
         console.error(error);
       });
@@ -16449,6 +16466,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "Dashboard",
   props: ["id"],
+  // client id passed via router
   components: {
     SideBar: _SideBar__WEBPACK_IMPORTED_MODULE_0__.default
   },
@@ -16457,14 +16475,8 @@ __webpack_require__.r(__webpack_exports__);
       client: []
     };
   },
-  mounted: function mounted() {
-    var _this = this;
-
-    this.$axios.get("http://localhost:8000/api/clients/get/".concat(this.id)).then(function (response) {
-      _this.client = response.data;
-    })["catch"](function (error) {
-      console.error(error);
-    });
+  created: function created() {
+    this.getClient();
   },
   methods: {
     capitalize: function capitalize(value) {
@@ -16473,14 +16485,24 @@ __webpack_require__.r(__webpack_exports__);
       return value.charAt(0).toUpperCase() + value.slice(1);
     },
     formatDate: function formatDate(value) {
-      if (value) {
-        return moment(String(value)).format("MM-DD-YYYY");
-      }
+      if (!value) return '';
+      return moment(String(value)).format("MM-DD-YYYY");
     },
     getImage: function getImage(image) {
       if (image) return "../../storage/profile_images/".concat(image);else return "../../storage/profile_images/blank_pic.png";
     },
+    getClient: function getClient() {
+      var _this = this;
+
+      //get a single client with the client id
+      this.$axios.get("/api/clients/get/".concat(this.id)).then(function (response) {
+        _this.client = response.data;
+      })["catch"](function (error) {
+        console.error(error);
+      });
+    },
     goBack: function goBack() {
+      //go back to previous route
       this.$router.go(-1);
     }
   }
@@ -16666,6 +16688,9 @@ var _hoisted_22 = {
   type: "submit",
   "class": "btn btn-primary"
 };
+var _hoisted_23 = {
+  "class": "text-red-500"
+};
 
 (0,vue__WEBPACK_IMPORTED_MODULE_0__.popScopeId)();
 
@@ -16744,7 +16769,9 @@ var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data,
   /* HYDRATE_EVENTS, NEED_PATCH */
   )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_21, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("button", _hoisted_22, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.btnText), 1
   /* TEXT */
-  )])], 32
+  )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_23, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.error), 1
+  /* TEXT */
+  )], 32
   /* HYDRATE_EVENTS */
   )])])])]);
 });
@@ -16813,29 +16840,35 @@ var _hoisted_7 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("
 );
 
 var _hoisted_8 = {
+  "class": "border border-blue-300 shadow rounded-md p-4 max-w-sm w-full mx-auto"
+};
+
+var _hoisted_9 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<div class=\"animate-pulse flex space-x-4\"><div class=\"rounded-full bg-blue-400 h-12 w-12\"></div><div class=\"flex-1 space-y-4 py-1\"><div class=\"h-4 bg-blue-400 rounded w-3/4\"></div><div class=\"space-y-2\"><div class=\"h-4 bg-blue-400 rounded\"></div><div class=\"h-4 bg-blue-400 rounded w-5/6\"></div></div></div></div>", 1);
+
+var _hoisted_10 = {
   "class": "text-center space-y-2 sm:text-left"
 };
-var _hoisted_9 = {
+var _hoisted_11 = {
   "class": "space-y-0.5"
 };
-var _hoisted_10 = {
+var _hoisted_12 = {
   "class": "text-lg text-black font-semibold"
 };
-var _hoisted_11 = {
+var _hoisted_13 = {
   "class": "text-gray-500 font-medium"
 };
 
-var _hoisted_12 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("button", {
+var _hoisted_14 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("button", {
   "class": "px-4 py-1 text-sm text-purple-600 font-semibold rounded-full border border-purple-200 hover:text-white hover:bg-purple-600 hover:border-transparent focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-offset-2"
 }, " Full Details ", -1
 /* HOISTED */
 );
 
-var _hoisted_13 = {
+var _hoisted_15 = {
   key: 1
 };
 
-var _hoisted_14 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("h4", {
+var _hoisted_16 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("h4", {
   "class": "text-center mt-4"
 }, "No Clients Found", -1
 /* HOISTED */
@@ -16865,7 +16898,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     })
   }, null, 512
   /* NEED_PATCH */
-  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.keyword]])])]), _hoisted_7, $data.clients ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
+  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.keyword]])])]), _hoisted_7, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("start skeleton"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_8, [_hoisted_9], 512
+  /* NEED_PATCH */
+  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vShow, $data.loading]]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" end skeleton"), $data.clients ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
     key: 0
   }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.clients, function (client, index) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("div", {
@@ -16878,9 +16913,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       src: $options.getImage(client.profile_image)
     }, null, 8
     /* PROPS */
-    , ["src"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_8, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_9, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("p", _hoisted_10, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.capitalize(client.first_name)) + " " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.capitalize(client.last_name)), 1
+    , ["src"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_10, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("p", _hoisted_12, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.capitalize(client.first_name)) + " " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.capitalize(client.last_name)), 1
     /* TEXT */
-    ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("p", _hoisted_11, "counsel: " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.capitalize(client.primary_counsel)), 1
+    ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("p", _hoisted_13, "counsel: " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.capitalize(client.primary_counsel)), 1
     /* TEXT */
     )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_router_link, {
       to: {
@@ -16891,7 +16926,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       }
     }, {
       "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-        return [_hoisted_12];
+        return [_hoisted_14];
       }),
       _: 2
       /* DYNAMIC */
@@ -16901,7 +16936,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     , ["to"])])]);
   }), 128
   /* KEYED_FRAGMENT */
-  )) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("div", _hoisted_13, [_hoisted_14]))])]);
+  )) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("div", _hoisted_15, [_hoisted_16]))])]);
 }
 
 /***/ }),
