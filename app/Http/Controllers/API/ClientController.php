@@ -50,6 +50,7 @@ $validator = Validator::make($request->all(), $rules);
 //process the request
 
 //if the client uploaded a profile image then process it
+
    if($request->hasFile('profile_image')){
             //get filename with extension
             $filenameWithExt = $request->file('profile_image')->getClientOriginalName();
@@ -59,12 +60,15 @@ $validator = Validator::make($request->all(), $rules);
             //get just ext
             $extension = $request->file('profile_image')->getClientOriginalExtension();
             //filename to store
-            $filenameToStore ='../storage/profile_images/'. $filename.'_'.time().'.'.$extension;
+            $filenameToStore = $filename.'_'.time().'.'.$extension;
             //upload image
-            $path = $request->file('profile_image')->storeAs('public/profile_images',$filenameToStore);
-        }else{
+            $request->file('profile_image')->storeAs('public/profile_images',$filenameToStore);
+   }
+   else{
             $filenameToStore = '';
         }
+
+    
 //create a new client
     $client = new Client;
     $client ->first_name = $request->first_name;

@@ -1,5 +1,6 @@
 <template>
   <div class="grid md:grid-cols-2 sm:grid-cols-2 gap-2">
+ 
     <SideBar />
     <div>
       <section
@@ -59,14 +60,14 @@
           alt=""
           class="w-12 h-12 ring-2 rounded-full bg-light-blue-100"
           loading="lazy"
-          :src="client.profile_image"
+          :src="getImage(client.profile_image)"
         />
         <div class="text-center space-y-2 sm:text-left">
           <div class="space-y-0.5">
             <p class="text-lg text-black font-semibold">
-              {{ client.first_name }} {{ client.last_name }}
+              {{ capitalize(client.first_name) }} {{ capitalize(client.last_name) }}
             </p>
-            <p class="text-gray-500 font-medium">counsel: {{ client.primary_counsel }}</p>
+            <p class="text-gray-500 font-medium">counsel: {{ capitalize(client.primary_counsel) }}</p>
           </div>
           <router-link :to="{ name: 'dashboard', params: { id: client.id } }">
             <button
@@ -104,6 +105,7 @@ export default {
       this.debounceSearch = debounce(this.search, 1000);
   },
 
+
   watch: {
     keyword() {
       if (!this.keyword)return;
@@ -112,6 +114,12 @@ export default {
   },
 
   methods: {
+      capitalize(value) {
+    if (!value) return ''
+    value = value.toString()
+    return value.charAt(0).toUpperCase() + value.slice(1)
+  },
+
     search(){
       if (this.keyword){
       this.$axios
@@ -135,9 +143,16 @@ this.$axios
       .catch(function (error) {
         console.error(error);
       });
+    },
+    getImage(image){
+      if(image)
+      return `../storage/profile_images/${image}`;
+      else
+      return "../storage/profile_images/blank_pic.png";
     }
     
 
   },
+
 };
 </script>

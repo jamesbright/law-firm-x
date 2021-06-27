@@ -49,7 +49,7 @@
             </div>
             <div class="text-right">
               <button type="submit" class="btn btn-primary"> 
-             Add Client</button>
+             {{ btnText }}</button>
             </div>
           </form>
         </div>
@@ -68,10 +68,12 @@ export default {
   data() {
     return {
       client: {},
+      btnText:"Add Client"
     };
   },
   methods: {
     addClient() {
+        this.btnText = "Processing..";
       let formData = new FormData();
       formData.append("first_name", this.client.first_name);
       formData.append("last_name", this.client.last_name);
@@ -79,15 +81,17 @@ export default {
       formData.append("primary_counsel", this.client.primary_counsel);
       formData.append("case_details", this.client.case_details);
       formData.append("dob", this.client.dob);
+      if(this.client.profile_image)
       formData.append("profile_image", this.client.profile_image);
+        this.btnText = "Sending..";
       this.$axios
-        .post("http://localhost:8000/api/add", formData, {
+        .post("http://localhost:8000/api/clients/add", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
         })
         .then((response) => {
-          console.log(response);
+        this.btnText = "Done";
           this.$router.push({ name: "clients" });
         })
         .catch(function (error) {
