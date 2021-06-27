@@ -3,15 +3,32 @@
     <div class="grid md:grid-cols-2 sm:grid-cols-2 gap-4">
       <SideBar />
       <div class="border-2 hover:border-blue-400 rounded-xl p-6">
+        <div v-on:click="goBack()">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M10 19l-7-7m0 0l7-7m-7 7h18"
+            />
+          </svg>
+        </div>
         <h4 class="text-center">Add client</h4>
         <div class="">
           <form @submit.prevent="addClient">
-          <div class="form-group">
-          <i>required fields are marked with <span class="required"></span></i>
-          </div>
-            <div class="form-group  required">
+            <div class="form-group">
+              <i>required fields are marked with <span class="required"></span></i>
+            </div>
+            <div class="form-group required">
               <label>First Name</label>
-              <input required
+              <input
+                required
                 type="text"
                 class="form-control"
                 v-model="client.first_name"
@@ -19,7 +36,12 @@
             </div>
             <div class="form-group required">
               <label>Last Name</label>
-              <input required type="text" class="form-control" v-model="client.last_name" />
+              <input
+                required
+                type="text"
+                class="form-control"
+                v-model="client.last_name"
+              />
             </div>
             <div class="form-group required">
               <label>Email</label>
@@ -27,7 +49,12 @@
             </div>
             <div class="form-group required">
               <label>Primary Counsel</label>
-              <input required type="text" class="form-control" v-model="client.primary_counsel" />
+              <input
+                required
+                type="text"
+                class="form-control"
+                v-model="client.primary_counsel"
+              />
             </div>
             <div class="form-group required">
               <label>Case Details</label>
@@ -48,8 +75,9 @@
               />
             </div>
             <div class="text-right">
-              <button type="submit" class="btn btn-primary"> 
-             {{ btnText }}</button>
+              <button type="submit" class="btn btn-primary">
+                {{ btnText }}
+              </button>
             </div>
           </form>
         </div>
@@ -68,12 +96,12 @@ export default {
   data() {
     return {
       client: {},
-      btnText:"Add Client"
+      btnText: "Add Client",
     };
   },
   methods: {
     addClient() {
-        this.btnText = "Processing..";
+      this.btnText = "Processing..";
       let formData = new FormData();
       formData.append("first_name", this.client.first_name);
       formData.append("last_name", this.client.last_name);
@@ -81,9 +109,9 @@ export default {
       formData.append("primary_counsel", this.client.primary_counsel);
       formData.append("case_details", this.client.case_details);
       formData.append("dob", this.client.dob);
-      if(this.client.profile_image)
-      formData.append("profile_image", this.client.profile_image);
-        this.btnText = "Sending..";
+      if (this.client.profile_image)
+        formData.append("profile_image", this.client.profile_image);
+      this.btnText = "Sending..";
       this.$axios
         .post("http://localhost:8000/api/clients/add", formData, {
           headers: {
@@ -91,7 +119,7 @@ export default {
           },
         })
         .then((response) => {
-        this.btnText = "Done";
+          this.btnText = "Done";
           this.$router.push({ name: "clients" });
         })
         .catch(function (error) {
@@ -100,6 +128,9 @@ export default {
     },
     handleFile() {
       this.client.profile_image = this.$refs.file.files[0];
+    },
+    goBack() {
+      this.$router.go(-1);
     },
   },
 };

@@ -6,6 +6,12 @@
         v-if="client"
         class="py-8 px-8 mb-2 max-w-sm mx-auto bg-white rounded-xl shadow-md space-y-2 sm:py-4 sm:items-center sm:space-y-0 sm:space-x-6"
       >
+      
+  <div v-on:click="goBack()">
+   <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+</svg>
+</div>
         <img
           alt=""
           class="w-40 h-40 ml-5 ring-2 rounded-full bg-light-blue-100"
@@ -88,6 +94,9 @@ export default {
         else
       return "../../storage/profile_images/blank_pic.png";
 
+    },
+    goBack(){
+        this.$router.go(-1);
     }
   },
 };
