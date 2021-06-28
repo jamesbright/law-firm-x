@@ -31,7 +31,7 @@
 
 ### Addition
 To remind clients to add their profile picture every 3 days `('0 0 */3 * *')`  a cron job was used. You need a Linux Operating System to run Cron Jobs. 
-to setup the Cron Jobs to run automatically without initiating manually by running the command,we need to  start the Laravel Scheduler itself, we only need to add one Cron job which executes every minute. Go to your terminal,cd into your project and run this command `crontab -e` This will open the server Crontab file, paste the code below into the file, save and then exit.
+to setup the Cron Jobs to run automatically without initiating manually by running the command,we need to  start the Laravel Scheduler itself, we only need to add one Cron job which executes every minute. Go to your terminal,cd into your project and run this command `crontab -e` This will open the server Crontab file, paste the code below into the file, save and then exit. you can find more info here [Laravel task scheduling](https://laravel.com/docs/8.x/scheduling)
 ```
 * * * * * cd /path-to-your-project && php artisan schedule:run >> /dev/null 2>&1
 ```
