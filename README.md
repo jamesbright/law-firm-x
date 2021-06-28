@@ -1,4 +1,4 @@
-#### Clients Profile app Built with [Laravel](https://laravel.com) [Vue](https://vuejs.org) and [Tailwind CSS](https://vuejs.org) 
+#### Clients profile app built with [Laravel](https://laravel.com) [Vue](https://vuejs.org) and [Tailwind CSS](https://vuejs.org) 
 
 ## Setup
 
