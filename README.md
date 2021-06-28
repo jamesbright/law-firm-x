@@ -1,62 +1,49 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+#### Clients Profile app Built with [Laravel](https://laravel.com) [Vue](https://vuejs.org) and [Tailwind CSS](https://vuejs.org) 
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Setup
 
-## About Laravel
+1. open command line and run `git clone https://github.com/jamesbright/law-firm-x` to clone this repository into your machine
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+2. after successful cloning, `cd law-firm-x`
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+3. run `cp .env.example .env` to create an environment config file from the example file
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+4. open .env file in code editor and set the mysql database credentials: you can leave it as default if the username and password matches that on your machine.
 
-## Learning Laravel
+5. set the mailtrap credentails: login to [Mailtrap](https://mailtrap.io) and set `MAIL_USERNAME` and `MAIL_PASSWORD` to your credentials.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+6. if you used the default mysql credentials then create a mysql database with name `law-firm-x` using phpmyadmin or cli.
+```php
+ mysql -uroot -p
+  create database law-firm-x;
+  exit
+ ```
+ 7. i assume you have [composer](https://getcomposer.org) 
+ installed, ensure you are in the project root directory and run `composer install`
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+![composer](https://getcomposer.org/img/logo-composer-transparent5.png)
 
-## Laravel Sponsors
+8. migrate database files with `php artisan migrate`
+9. run `npm install and npm run dev` to install and compile frontend dependencies
+10. `php artisan storage:link` to link storage
+11. `php artisan key:generate` to generate fresh app key
+12. finally `php artisan serve`, open app in browser url `localhost:8000`
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+### Addition
+To remind clients to add their profile picture every 3 days `('0 0 */3 * *')`  a cron job was used. You need a Linux Operating System to run Cron Jobs. 
+to setup the Cron Jobs to run automatically without initiating manually by running the command,we need to  start the Laravel Scheduler itself, we only need to add one Cron job which executes every minute. Go to your terminal,cd into your project and run this command `crontab -e` This will open the server Crontab file, paste the code below into the file, save and then exit.
+```
+* * * * * cd /path-to-your-project && php artisan schedule:run >> /dev/null 2>&1
+```
+`path-to-your-project` here should be `law-firm-x`
 
-### Premium Partners
+## previews
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
+![](https://github.com/jamesbright/law-firm-x/blob/master/preview/Capture3.JPG) ![](https://github.com/jamesbright/law-firm-x/blob/master/preview/Capture4.JPG)
 
-## Contributing
+![](https://github.com/jamesbright/law-firm-x/blob/master/preview/Capture.JPG)
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+![](https://github.com/jamesbright/law-firm-x/blob/master/preview/Capture2.JPG)
 
-## Code of Conduct
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
 
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
