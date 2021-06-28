@@ -24,7 +24,7 @@
 ![composer](https://getcomposer.org/img/logo-composer-transparent5.png)
 
 8. migrate database files with `php artisan migrate`
-9. run `npm install and npm run dev` to install and compile frontend dependencies
+9. run `npm install && npm run dev`  to install and compile frontend dependencies
 10. `php artisan storage:link` to link storage
 11. `php artisan key:generate` to generate fresh app key
 12. finally `php artisan serve`, open app in browser url `localhost:8000`
