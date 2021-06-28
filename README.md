@@ -14,7 +14,7 @@
 
 6. if you used the default mysql credentials then create a mysql database with name `law-firm-x` using phpmyadmin or cli.
 ```php
- mysql -uroot -p
+ mysql -u root -p
   create database law-firm-x;
   exit
  ```
