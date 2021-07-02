@@ -12,10 +12,10 @@
 
 5. set the mailtrap credentails: login to [Mailtrap](https://mailtrap.io) and set `MAIL_USERNAME` and `MAIL_PASSWORD` to your credentials.
 
-6. if you used the default mysql credentials then create a mysql database with name `law-firm-x` using phpmyadmin or cli.
+6. if you used the default mysql credentials then create a mysql database with name `law_firm_x` using phpmyadmin or cli.
 ```php
  mysql -u root -p
-  create database law-firm-x;
+  create database law_firm_x;
   exit
  ```
  7. i assume you have [composer](https://getcomposer.org) 
